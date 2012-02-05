@@ -12,7 +12,12 @@ body {
 
 #bookContents {
 	padding:0px 0px 0px 70px;
-	z-index:1;
+	height:100%;
+}
+
+#bookFrame {
+	width:700px;
+	height:100%;
 }
 
 .sweetMenuAnchor{

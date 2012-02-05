@@ -4,7 +4,8 @@ var gblDataDir = "";
 //目次がクリックされたら対応するページを表示 
 function view(url){
 	
-   var contentNdoe = document.getElementById("bookContents");
+   var frameNode = document.getElementById("bookFrame");
+   console.log(frameNode);
 
    var text  = getEPubData(url);
    var xhtml = Utf8.decode(text);
@@ -40,7 +41,8 @@ function view(url){
 
    var serializer = new XMLSerializer();
    var newXhtml = serializer.serializeToString(dom);
-   contentNdoe.innerHTML = newXhtml;
+   
+   frameNode.contentWindow.document.innerHTML = newXhtml;
 
    $("#manifestDialog").dialog('close');
 } 
