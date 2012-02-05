@@ -1,0 +1,62 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta charset="UTF-8" /> 
+<title>Chrome EPUB</title> 
+
+<link type="text/css" rel="stylesheet" href="css/smoothness/jquery-ui-1.8.17.custom.css" />
+<link type="text/css" rel="stylesheet" href="css/design.css" />
+
+<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script> 
+<script type="text/javascript" src="js/jquery-ui-1.8.17.custom.min.js"></script> 
+
+<script type="text/javascript" src="js/jquery.easing.js"></script> 
+<script type="text/javascript" src="js/jquery.sweet-menu-min-1.0.js"></script> 
+
+<script type="text/javascript" src="js/base64.js"></script> 
+
+<script type="text/javascript" src="js/zip.js"></script> 
+<script type="text/javascript" src="js/sjis.js"></script> 
+<script type="text/javascript" src="js/jsinflate.js"></script> 
+<!-- 
+<script type="text/javascript" src="js/zip.min.js"></script> 
+ -->
+<script type="text/javascript" src="js/utf8.js" charset="utf-8"></script> 
+<script type="text/javascript" src="js/epub.js" charset="utf-8"></script> 
+
+</head> 
+
+<body> 
+
+<div id="bookContents">
+</div> 
+
+<img id="icon_here"><br>
+
+<div id="epubDialog">
+  <input type="file" id="epubFile"/>
+</div>
+
+<div id="manifestDialog">
+  <div id="menubar"> </div>
+</div>
+
+  
+
+  <ul id="exampleMenu">
+    <li><a href="javascript:void(0)" onclick="openManifestDialog(); return false;">Select...</a></li>
+    <li><a href="#home">トップ</a></li>
+    <li><a href="#home">次の章</a></li>
+    <li><a href="#home">前の章</a></li>
+    <li><a href="#home">Contact</a></li>
+    <li><a href="#home">My Apps</a></li>
+  </ul>
+        
+  <ul id="epubSelect">
+    <li><a href="javascript:void(0)" onclick="openSelectDialog(); return false;">Select...</a></li>
+  </ul>
+
+
+
+</body> 
+</html>
