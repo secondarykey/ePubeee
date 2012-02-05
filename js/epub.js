@@ -41,8 +41,11 @@ function view(url){
 
    var serializer = new XMLSerializer();
    var newXhtml = serializer.serializeToString(dom);
-   
-   frameNode.contentWindow.document.innerHTML = newXhtml;
+  
+   //frameNode.contentDocument = dom;
+   //frameNode.contentDocument.body.innrHTML = newXhtml;
+ 
+   frameNode.contentWindow.document.body.innerHTML = newXhtml;
 
    $("#manifestDialog").dialog('close');
 } 
