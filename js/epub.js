@@ -8,8 +8,9 @@ function view(url){
 
    var text  = getEPubData(url);
    var xhtml = Utf8.decode(text);
-   var dom = changeDom(xhtml);
+   var dom   = changeDom(xhtml);
 
+   //画像の展開
    var imgTags = dom.getElementsByTagName("img");
    for ( var cnt = 0; cnt < imgTags.length; ++cnt ) {
 	   var imgTag = imgTags[cnt];
@@ -18,7 +19,25 @@ function view(url){
 	   var imgData = getImage(imgFileName);
 	   imgTag.src = imgData;
    }
-   
+
+   //cssの読み込み
+   var linkTags = dom.getElementsByTagName("link");
+   for ( var cnt = 0; cnt < linkTags.length; ++cnt ) {
+	   var linkTag = linkTags[cnt];
+	   var cssFileName = linkTag.getAttribute("href");
+	   var cssFileData = getEPubData(cssFileName);
+
+	   //現在のHTMLに適用
+	   var styleTag = document.createElement("style");
+	   var cssData = document.createTextNode(cssFileData);
+	   styleTag.appendChild(cssData);
+	   var parent = linkTag.parentElement;
+	   parent.appendChild(styleTag);
+
+	   //リンクタグは削除
+	   linkTag.parentElement.removeChild(linkTag);
+   }
+
    var serializer = new XMLSerializer();
    var newXhtml = serializer.serializeToString(dom);
    contentNdoe.innerHTML = newXhtml;
@@ -28,7 +47,6 @@ function view(url){
 
 //展開したデータをファイル名から取得
 function getEPubData(fileName) {
-	console.log(zip.files[gblDataDir+fileName]);
   return zip.files[gblDataDir+fileName].inflate();
 }
 
