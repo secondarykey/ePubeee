@@ -22,7 +22,8 @@
     function setHTML(id) {
     	var frameNode = document.getElementById("epub");
     	frameNode.contentWindow.document.body.innerHTML = epub.getHTML(id);
-      };
+    };
+
     $(document).ready(function() {
       //EPUBファイル指定処理
       $("#epubFile").change(function() {
@@ -69,12 +70,27 @@
 
   <body>
 
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="./index.html">ePubeee</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#select" data-toggle="modal">Select...</a></li>
+              <li><a href="#information" data-toggle="modal">Information</a></li>
+              <li><a href="#index" data-toggle="modal">Index</a></li>
+            </ul>
 
-    <div class="span12">
-      <div class="alert alert-info">
-        1.local = <input type="file" id="epubFile"/>
-        <br>
-        2.Web = <input type="text" id="url"/> <button class="btn" id="webBtn">GET</button>
+            <ul class="nav pull-right">
+              <li><a href="https://github.com/secondarykey/ePubeee" target="_blank">GitHub</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -86,6 +102,51 @@
 		  <iframe id="epub" width="90%" height="100%" src="empty.html"></iframe>
 	    </div>
        </div>
+    </div>
+
+    <!-- Select File --> 
+    <div id="select" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="selectLabel">Select EPUB File</h3>
+      </div>
+      <div class="modal-body">
+            1.local = <input type="file" id="epubFile"/>
+            <br>
+            2.Web = <input type="text" id="url"/> <button class="btn" id="webBtn">GET</button>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
+    </div>
+
+    <!-- Information --> 
+    <div id="information" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="informationLabel">Information</h3>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
+    </div>
+    
+
+    <!-- Index --> 
+    <div id="index" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="indexLabel">Index</h3>
+      </div>
+      <div class="modal-body">
+ 
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
     </div>
 
   </body>
