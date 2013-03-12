@@ -195,7 +195,7 @@ $(document).ready(function() {
 	
   //EPUBファイル指定処理
   $("#epubFile").change(function() {
-	
+
 	  $("#epubDialog").dialog('close');
 	  //ファイルを変更された場合
 	  var fileData = document.getElementById("epubFile").files[0];

@@ -1,59 +1,92 @@
-<!DOCTYPE html> 
-<html> 
-<head> 
-<meta charset="UTF-8" /> 
-<title>Chrome EPUB</title> 
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ePubeee</title>
 
-<link type="text/css" rel="stylesheet" href="css/smoothness/jquery-ui-1.8.17.custom.css" />
-<link type="text/css" rel="stylesheet" href="css/design.css" />
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="css/ePubeee.css" />
 
-<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script> 
-<script type="text/javascript" src="js/jquery-ui-1.8.17.custom.min.js"></script> 
+    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
 
-<script type="text/javascript" src="js/jquery.easing.js"></script> 
-<script type="text/javascript" src="js/jquery.sweet-menu-min-1.0.js"></script> 
+    <script type="text/javascript" src="js/base64.js"></script>
+    <script type="text/javascript" src="js/sjis.js"></script>
+    <script type="text/javascript" src="js/utf8.js"></script>
+    <script type="text/javascript" src="js/jsinflate.js"></script>
+    <script type="text/javascript" src="js/zip.js"></script>
 
-<script type="text/javascript" src="js/base64.js"></script> 
+    <script type="text/javascript" src="js/ePubeee.js" charset="utf-8"></script>
 
-<script type="text/javascript" src="js/zip.js"></script> 
-<script type="text/javascript" src="js/sjis.js"></script> 
-<script type="text/javascript" src="js/jsinflate.js"></script> 
-<!-- 
-<script type="text/javascript" src="js/zip.min.js"></script> 
- -->
-<script type="text/javascript" src="js/utf8.js" charset="utf-8"></script> 
-<script type="text/javascript" src="js/epub.js" charset="utf-8"></script> 
+    <script type="text/javascript">
+    function setHTML(id) {
+    	var frameNode = document.getElementById("epub");
+    	frameNode.contentWindow.document.body.innerHTML = epub.getHTML(id);
+      };
+    $(document).ready(function() {
+      //EPUBファイル指定処理
+      $("#epubFile").change(function() {
+  	    //ファイルを変更された場合
+  	    var fileData = document.getElementById("epubFile").files[0];
+  	    epub.getLocal(fileData,success,error);
+      });
 
-</head> 
+      $("webBtn").click(function() {
+    	  epub.getWeb($("#url").text(),success,error);
+      });
+      
+      function success() {
+  		for ( var idx = 0; idx < epub.pageList.length; ++idx ) {
+  			
+			var id = epub.pageList[idx];
+			
+			var li = $("<li/>");
+			li.attr("id",id);
+			if ( idx == 0 ) {
+				li.addClass("active");
+				setHTML(id);
+			}
 
-<body> 
+			var a = $("<a/>");
+			a.attr("href","#" + id);
+			a.attr("data-toggle","tab");
+			a.attr("onclick","setHTML('" + id + "')");
+			a.text(id);
 
-<div id="bookContents">
-  <iframe id="bookFrame" src="bookContent.html" frameborder="0"></iframe>
-</div> 
+			li.append(a);
 
-<div id="epubDialog">
-  <input type="file" id="epubFile"/>
-</div>
+			$("#nav").append(li);
+		}
+      };
+      
+      function error() {
+    	alert("error!");
+      }
+    });
+    </script>
 
-<div id="manifestDialog">
-  <div id="menubar"> </div>
-</div>
+  </head>
 
-  <ul id="exampleMenu">
-    <li><a href="javascript:void(0)" onclick="openManifestDialog(); return false;">Select...</a></li>
-    <li><a href="#home">トップ</a></li>
-    <li><a href="#home">次の章</a></li>
-    <li><a href="#home">前の章</a></li>
-    <li><a href="#home">Contact</a></li>
-    <li><a href="#home">My Apps</a></li>
-  </ul>
-        
-  <ul id="epubSelect">
-    <li><a href="javascript:void(0)" onclick="openSelectDialog(); return false;">Select...</a></li>
-  </ul>
+  <body>
 
 
+    <div class="span12">
+      <div class="alert alert-info">
+        1.local = <input type="file" id="epubFile"/>
+        <br>
+        2.Web = <input type="text" id="url"/> <button class="btn" id="webBtn">GET</button>
+      </div>
+    </div>
 
-</body> 
+    <div class="span12 tabbable tabs-left">
+      <ul class="nav nav-tabs" id="nav">
+	  </ul> 
+      <div class="tab-content" id="tab-content">
+	    <div class="tab-pane active" id="bookPanel" width="90%">
+		  <iframe id="epub" width="90%" height="100%" src="empty.html"></iframe>
+	    </div>
+       </div>
+    </div>
+
+  </body>
 </html>

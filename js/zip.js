@@ -224,7 +224,7 @@
 
   function Zip_inflate_file(url, callback) {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", url)
+    xhr.open("GET", url);
     xhr.onload = function () {
       var blob = xhr.responseText;
       var bytes = [];
