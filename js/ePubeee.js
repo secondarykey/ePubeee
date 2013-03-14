@@ -70,9 +70,7 @@ var epub = {
 	 */
 	getHTML : function(id) {
 
-   		var text  = epub.getData(epub.dataList[id]);
-   		var xhtml = Utf8.decode(text);
-   		var dom   = epub.changeDom(xhtml);
+   		var dom   = epub.createDom(epub.dataList[id]);
 
    		// 画像の展開
    		var imgTags = dom.getElementsByTagName("img");
@@ -135,8 +133,9 @@ var epub = {
 	},
 
 	createDom : function (fileName) {
-		var data = epub.zip.files[epub.dataPath + fileName].inflate();
-		return epub.changeDom(data);
+		var data = epub.getData(fileName);
+   		var xhtml = Utf8.decode(data);
+		return epub.changeDom(xhtml);
 	},
 
 	changeDom : function (data) {
@@ -242,6 +241,7 @@ var epub = {
 
   		//ファイル名からDomを作成 
   		var dom = epub.createDom(fileName);
+
   		// EPUB表示に必要なファイル項目を取得
   		var itemTag = dom.getElementsByTagName("manifest")[0].getElementsByTagName("item");
   		// 表示順を示すitemrefタグを取得
@@ -283,39 +283,29 @@ var information = {
 
 	setObject : function (opfData) {
 
-  		var metadataTag = opfData.getElementsByTagName("metadata")[0];
-  		var titleTags = metadataTag.getElementsByTagName("dc:title");
-  		if ( titleTags != null ) {
-  			var titleTag = titleTags[0];
-  			information.title = epub.getText(titleTag);
-  		}
-
-  		var creatorTags = metadataTag.getElementsByTagName("dc:creator");
-  		for ( var idx = 0; idx < creatorTags.length; ++idx ) {
-  			var creatorTag = creatorTags[idx];
-  			var property = creatorTag.getAttribute("id");
-  			if ( property == "creator" ) {
-  				information.creator = epub.getText(creatorTag);
-  			}
-  		}
-
-  		var metaList = metadataTag.getElementsByTagName("meta");
-  		//Metaタグ数回繰り返す
-  		for ( var idx = 0; idx < metaList.length; ++idx ) {
-  			var metaTag = metaList[idx];
-  			var property = metaTag.getAttribute("property");
-  			if ( property != null ) {
-  			}
-  			var name = metaTag.getAttribute("name");
-  			if ( name != null ) {
+  		var metadataTags = opfData.getElementsByTagName("metadata")[0];
+  		var childNodes = metadataTags.childNodes;
+  		for ( var idx = 0; idx < childNodes.length; ++idx ) {
+  			var metadataTag = childNodes[idx];
+  			if ( metadataTag.nodeName == "dc:title" ) {
+  				information.title = epub.getText(metadataTag);
+  			} else if ( metadataTag.nodeName == "dc:creator" ) {
+  				var property = metadataTag.getAttribute("id");
+  				if ( property == "creator" ) {
+  					information.creator = epub.getText(metadataTag);
+  				}
+  			} else if ( metadataTag.nodeName == "meta" ) {
+  				var property = metadataTag.getAttribute("property");
+  				if ( property != null ) {
+  				}
+  				var name = metadataTag.getAttribute("name");
   				if ( name == "cover" ) {
-  					var contentId = metaTag.getAttribute("content");
+  					var contentId = metadataTag.getAttribute("content");
   					var coverFile = epub.dataList[contentId];
   					information.coverData = epub.getImage(coverFile);
   				}
   			}
   		}
-		
 	}
 	
 };
