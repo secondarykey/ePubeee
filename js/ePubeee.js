@@ -4,8 +4,12 @@ var epub = {
 	zip : null,
 	pageList : new Array(),
 	dataList : {},
-
+	
+	/**
+	 * URLからEPUBデータを取得
+	 */
 	getWeb : function (url,callback,error) {
+		epub.clear();
 		$.ajax({
 			url: url,
 			dataType: 'zip',
@@ -20,7 +24,19 @@ var epub = {
 		});
 	},
 	
+	clear : function () {
+		epub.dataPath = "";
+		epub.zip = null;
+		epub.pageList = new Array();
+		epub.dataList = {};
+	},
+
+	/**
+	 * 指定したファイルからEPUBデータを取得
+	 */
 	getLocal : function (fileData,callback,error) {
+		
+		epub.clear();
 
 		  var reader = new FileReader(); 
 		  //読み込みが完了したら
@@ -49,7 +65,9 @@ var epub = {
 		  reader.readAsBinaryString(fileData);
 	},
 
-	// 目次がクリックされたら対応するページを表示
+	/**
+	 * 指定したIDのHTMLデータをDOMで取得
+	 */
 	getHTML : function(id) {
 
    		var text  = epub.getData(epub.dataList[id]);
@@ -125,6 +143,14 @@ var epub = {
 		var xmldom = new DOMParser();
     	var dom = xmldom.parseFromString( data, "application/xml" );
 		return dom;
+	},
+	
+	getText : function (tag) {
+		if ( tag === undefined ) return "none";
+		if ( tag.textContent === undefined ) {
+			return tag.innerHTML;
+		}
+		return tag.textContent;
 	},
 
 	/**
@@ -228,10 +254,68 @@ var epub = {
       			var cID = itemTag[j].getAttribute("id");
       			if (ID == cID){
       				epub.pageList.push(ID);
-      				epub.dataList[ID] = itemTag[j].getAttribute("href");
         			break; 
       			}
     		}
   		}
+
+   		for(var j=0; j<itemTag.length; j++){
+			var id = itemTag[j].getAttribute("id");
+			epub.dataList[id] = itemTag[j].getAttribute("href");
+   		}
+
+  		information.setObject(dom);
+	},
+	
+	
+	
+};
+
+var information = {
+
+	coverData : null ,
+	title : "" ,
+	creator : "" ,
+	createDate : "",
+	modifiedDate : "",
+	pubId : "",
+	version : "",
+
+	setObject : function (opfData) {
+
+  		var metadataTag = opfData.getElementsByTagName("metadata")[0];
+  		var titleTags = metadataTag.getElementsByTagName("dc:title");
+  		if ( titleTags != null ) {
+  			var titleTag = titleTags[0];
+  			information.title = epub.getText(titleTag);
+  		}
+
+  		var creatorTags = metadataTag.getElementsByTagName("dc:creator");
+  		for ( var idx = 0; idx < creatorTags.length; ++idx ) {
+  			var creatorTag = creatorTags[idx];
+  			var property = creatorTag.getAttribute("id");
+  			if ( property == "creator" ) {
+  				information.creator = epub.getText(creatorTag);
+  			}
+  		}
+
+  		var metaList = metadataTag.getElementsByTagName("meta");
+  		//Metaタグ数回繰り返す
+  		for ( var idx = 0; idx < metaList.length; ++idx ) {
+  			var metaTag = metaList[idx];
+  			var property = metaTag.getAttribute("property");
+  			if ( property != null ) {
+  			}
+  			var name = metaTag.getAttribute("name");
+  			if ( name != null ) {
+  				if ( name == "cover" ) {
+  					var contentId = metaTag.getAttribute("content");
+  					var coverFile = epub.dataList[contentId];
+  					information.coverData = epub.getImage(coverFile);
+  				}
+  			}
+  		}
+		
 	}
+	
 };
