@@ -12,6 +12,7 @@ div.epub {
 
 #epubFrame {
 	border: solid;
+	overflow:hidden;
 }
 
 div.pager {

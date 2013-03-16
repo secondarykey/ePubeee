@@ -20,53 +20,34 @@
 <script type="text/javascript" src="js/ePubeee.js" charset="utf-8"></script>
 
 <script type="text/javascript">
-	function frameScroll(cond, obj, options) {
-		// オプション - 呼び出し元で指定
-		var c = jQuery.extend({
-			duration : 200,
-			easing : 'swing',
-			step : 300
-		}, options || {});
-
-		// frameScroll内で使う変数
-		var d = obj.contentWindow.document, content = jQuery.support.boxModel ? navigator.appName
-				.match(/Opera/) ? 'html' : 'html,body' : 'body', scrollPos = d.body.scrollTop
-				|| d.documentElement.scrollTop;
-
-		// starterなら一番上、upなら上へ、downなら下へ
-		obj.scrollTop = cond.match(/starter/) ? 0
-				: cond.match(/up/) ? scrollPos + c.step : scrollPos - c.step;
-		obj.documentHeight = jQuery('body').attr('scrollHeight');
-		//スクロール
-		jQuery(content).animate({
-			scrollTop : obj.scrollTop
-		}, {
-			duration : c.duration,
-			easing : c.easing,
-			queue : false
-		});
-	}
 
 	function setHTML(id) {
 		var frameNode = document.getElementById("epubFrame");
 		frameNode.contentWindow.document.body.innerHTML = epub.getHTML(id);
 	};
 
+	$(window).resize(function() {
+		//iframeに空データを作成
+		var frameNode = document.getElementById("epubFrame");
+		frameNode.height = frameNode.parentNode.height;
+		
+	});
+	
 	$(document).ready(function() {
 
 		//iframeに空データを作成
 		var frameNode = document.getElementById("epubFrame");
-		var doc = frameNode.contentWindow.document;
-		var $body = $('body', doc);
-		$body.html('');
-
+		epub.init(frameNode);
+		
+		//$('#epubFrame').iframeAutoHeight();
+		
 		$("#leftBtn").click(function() {
-			frameScroll('up', $('iframe')[0], {
+			frameNode.frameScroll('up', {
 				step : 400
 			});
 		});
 		$("#rightBtn").click(function() {
-			frameScroll('down', $('iframe')[0], {
+			frameNode.frameScroll('down', {
 				step : 400
 			});
 		});
@@ -151,8 +132,8 @@
 		</div>
 	</div>
 
-	<div class="row-fluid" height="100%">
-		<div class="span1 pager">
+	<div class="row-fluid" style="min-height:100%">
+		<div class="span1 pager" height="500">
 			<button id="leftBtn" class="btn btn-primary">←</button>
 		</div>
 

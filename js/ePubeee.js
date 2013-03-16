@@ -61,8 +61,15 @@ var epub = {
 		  reader.onerror = function(evt){
 			callback();
 		  };
-
 		  reader.readAsBinaryString(fileData);
+	},
+	
+	init : function (frameNode) {
+		var doc = frameNode.contentWindow.document;
+		//var $head = $('head', doc);
+		//$head.html('<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script><script type="text/javascript" src="js/iframe.js"></script>');
+		var $body = $('body', doc);
+		$body.html('');
 	},
 
 	/**
